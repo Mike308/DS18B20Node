@@ -25,7 +25,6 @@ bool RF24Network::receiveMessage(char *data)
 {
     if (this->available())
     {
-       
         char msg[] = " ";
         uint8_t len = 0;
         len = this->getDynamicPayloadSize();
