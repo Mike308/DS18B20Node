@@ -1,4 +1,7 @@
+#ifndef RF24_NETWORK_H 
+#define RF24_NETWORK_H
 #include <RF24.h>
+#include <math.h>
 #define RX_BUF_SIZE 32
 #define TX_BUF_SIZE 64
 
@@ -16,4 +19,7 @@ private:
   String nodeAddress;
   char buf[TX_BUF_SIZE];
   String separator;
+  bool nativeWriteData(String message);
+
 };
+#endif
