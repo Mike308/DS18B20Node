@@ -22,8 +22,6 @@ bool RF24Network::nativeWriteData(String data) {
   Serial.print("length: ");
   Serial.println(length);
   uint8_t iterations = ceil((length) / 32.00);
-  Serial.print("iterations: ");
-  Serial.println(iterations);
   char originalMessageBuf[length];
   char txBuffor[32];
   bool result;
@@ -32,38 +30,55 @@ bool RF24Network::nativeWriteData(String data) {
   if (iterations == 1) {
     this->write(&originalMessageBuf, length);
   } else if (iterations == 2) {
+    Serial.print("I[2]: ");
     for (uint8_t j = 0; j < 31; j++) {
       txBuffor[j] = originalMessageBuf[j];
+      Serial.print(txBuffor[j]);
     }
     this->write(&txBuffor, 31);
     memset(txBuffor, 0, 32);
+    Serial.println();
+    Serial.print("II[2]: ");
     for (uint8_t j = 31; j < length; j++) {
       txBuffor[i] = originalMessageBuf[j];
+      Serial.print(txBuffor[i]);
       i++;
       if (i > length - 32) {
         i = 0;
       }
     }
     result = this->write(&txBuffor, 31);
+    memset(txBuffor, 0, 32);
   } else if (iterations == 3) {
+    Serial.print("I[3]: ");
+    i = 0;
     for (uint8_t j = 0; j < 31; j++) {
       txBuffor[j] = originalMessageBuf[j];
+      Serial.print(txBuffor[j]);
     }
     this->write(&txBuffor, 31);
-    memset(txBuffor, 0, 31);
+    memset(txBuffor, 0, 32);
     Serial.println();
-    for (uint8_t j = 31; j < 63; j++) {
+    Serial.print("II[3]: ");
+    i = 0;
+    for (uint8_t j = 31; j < 62; j++) {
       txBuffor[i] = originalMessageBuf[j];
+      Serial.print(txBuffor[i]);
       i++;
     }
     this->write(&txBuffor, 31);
     i = 0;
     memset(txBuffor, 0, 32);
-    for (uint8_t j = 63; j < length; j++) {
+    Serial.println();
+    Serial.print("III[3]: ");
+    for (uint8_t j = 62; j < length; j++) {
       txBuffor[i] = originalMessageBuf[j];
+      Serial.print(txBuffor[i]);
       i++;
     }
+    Serial.println();
     this->write(&txBuffor, 31);
+    memset(txBuffor, 0, 32);
   }
   return result;
 }
