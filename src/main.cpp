@@ -26,6 +26,7 @@ void setup() {
   node.setAutoAck(true);
   node.startListening();
   sensors.begin();
+  Serial.println("DS18B20 Module");
 }
 
 void loop() {

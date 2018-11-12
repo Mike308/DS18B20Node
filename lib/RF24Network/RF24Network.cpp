@@ -29,13 +29,15 @@ bool RF24Network::nativeWriteData(String data) {
   bool result;
   data.toCharArray(originalMessageBuf, length + 1);
   uint8_t i = 0;
-  if (iterations == 2) {
-    for (uint8_t j = 0; j < 31; j++ ){
+  if (iterations == 1) {
+    this->write(&originalMessageBuf, length);
+  } else if (iterations == 2) {
+    for (uint8_t j = 0; j < 31; j++) {
       txBuffor[j] = originalMessageBuf[j];
     }
     this->write(&txBuffor, 31);
     memset(txBuffor, 0, 32);
-    for (uint8_t j = 32; j < length; j++) {
+    for (uint8_t j = 31; j < length; j++) {
       txBuffor[i] = originalMessageBuf[j];
       i++;
       if (i > length - 32) {
@@ -44,11 +46,11 @@ bool RF24Network::nativeWriteData(String data) {
     }
     result = this->write(&txBuffor, 31);
   } else if (iterations == 3) {
-    for (uint8_t j = 0; j < 31; j++){
+    for (uint8_t j = 0; j < 31; j++) {
       txBuffor[j] = originalMessageBuf[j];
     }
     this->write(&txBuffor, 31);
-    memset(txBuffor, 0, 32);
+    memset(txBuffor, 0, 31);
     Serial.println();
     for (uint8_t j = 31; j < 63; j++) {
       txBuffor[i] = originalMessageBuf[j];
@@ -57,7 +59,7 @@ bool RF24Network::nativeWriteData(String data) {
     this->write(&txBuffor, 31);
     i = 0;
     memset(txBuffor, 0, 32);
-      for (uint8_t j = 63; j < length; j++) {
+    for (uint8_t j = 63; j < length; j++) {
       txBuffor[i] = originalMessageBuf[j];
       i++;
     }
